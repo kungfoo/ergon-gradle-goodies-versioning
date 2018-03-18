@@ -1,0 +1,10 @@
+
+defaultTasks 'version'
+
+ergon.versioning {
+	postProcessVersion = ch.ergon.gradle.goodies.versioning.PostProcessVersion.STRIP_NR_COMMITS_AND_G
+}
+
+task version.doLast {
+	println ergon.versioning.describeVersion()
+}

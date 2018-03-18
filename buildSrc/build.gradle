@@ -1,0 +1,27 @@
+// Apply the ergon-gradle-goodies project to itself so its plugins can be used on itself.
+
+apply plugin: 'groovy'
+
+repositories {
+	jcenter()
+}
+
+dependencies {
+	compile gradleApi()
+}
+
+def relativeFile(String path) {
+	File dir = new File(System.getProperty('user.dir'))
+	for (String segment : path.split('/')) {
+		dir = new File(dir, segment)
+	}
+	dir
+}
+
+sourceSets {
+	main {
+		java.srcDirs relativeFile('src/main/java'), relativeFile('egg-base/src/main/java')
+		groovy.srcDirs relativeFile('src/main/groovy'), relativeFile('egg-base/src/main/groovy')
+		resources.srcDirs relativeFile('src/main/resources'), relativeFile('egg-base/src/main/resources')
+	}
+}

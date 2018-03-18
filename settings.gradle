@@ -1,0 +1,4 @@
+rootProject.name="ergon-gradle-goodies"
+//include 'egg-license'
+include 'egg-base'
+

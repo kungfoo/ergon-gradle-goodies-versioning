@@ -1,0 +1,1 @@
+include ':versioning-simple', ':versioning-with-custom-version'

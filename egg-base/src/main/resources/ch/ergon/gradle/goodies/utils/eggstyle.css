@@ -1,0 +1,34 @@
+/* Style sheet for the reports. */
+#header {
+    vertical-align: center;
+}
+
+#logo {
+    position: absolute;
+    right: 10px;
+}
+
+#title {
+    vertical-align: center;
+    font-size: 40px;
+}
+
+.subTitle {
+    font-size: 20px;
+}
+
+.spacer {
+    margin-top: 40px;
+}
+
+.panel {
+    padding: 10px;
+    border-radius: 10px 10px 10px 10px;
+    border: 1px solid #AAAADD;
+    background-color: #D3E7F5;
+}
+
+th {
+    text-align: left;
+}
+ 
