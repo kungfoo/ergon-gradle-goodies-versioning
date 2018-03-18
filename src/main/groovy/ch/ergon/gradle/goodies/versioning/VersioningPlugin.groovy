@@ -5,10 +5,10 @@
 package ch.ergon.gradle.goodies.versioning
 
 import ch.ergon.gradle.goodies.Eggs
-import ch.ergon.gradle.goodies.Repositories
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.nativeplatform.Repositories
 
 /**
  * Nice and concise versioning of your artifacts using git describe and your git tags.
@@ -123,8 +123,9 @@ class VersioningPlugin implements Plugin<Project> {
             project.plugins.withId(id, projectWithSourceSet)
         }
 
-        // trigger on egg-publish
-        project.plugins.withId('egg-publish', new PublishedProject(project: project))
+        // there is no egg-publish here...
+//        // trigger on egg-publish
+//        project.plugins.withId('egg-publish', new PublishedProject(project: project))
 
         project.task(
                 group: 'versioning',

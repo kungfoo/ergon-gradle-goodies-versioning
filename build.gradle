@@ -7,7 +7,7 @@ plugins {
 allprojects {
 
 	// Let's eat our own dog food (cannot be part of plugins block, though).
-	// apply plugin: 'egg-versioning'
+	apply plugin: 'egg-versioning'
 	group = 'ch.ergon'
 
 	repositories {
