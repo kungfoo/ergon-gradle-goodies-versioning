@@ -4,6 +4,7 @@
 
 package ch.ergon.gradle.goodies.versioning
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static ch.ergon.gradle.goodies.versioning.VersioningPluginTestProject.*
@@ -104,6 +105,7 @@ class VersioningPluginSpec extends Specification {
         !exactMatch()
     }
 
+    @Ignore("This test is ignored until we have figured out how to do the intermediate/snapshot repository outside of ergon.")
     def "nexus repository url is intermediate repo when not on a tag"() {
         when:
         checkout NOT_ON_TAG

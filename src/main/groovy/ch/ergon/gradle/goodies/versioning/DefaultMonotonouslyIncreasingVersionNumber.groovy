@@ -19,6 +19,7 @@ class DefaultMonotonouslyIncreasingVersionNumber implements MonotonouslyIncreasi
         return calculate(project.ergon.versioning.describeLongVersion())
     }
 
+    @Override
     long calculate(String version) {
         int padding = project.ergon.versioning.versionNumberPadding
 
@@ -37,12 +38,12 @@ class DefaultMonotonouslyIncreasingVersionNumber implements MonotonouslyIncreasi
         }
     }
 
-    private String format(int number, int padding) {
+    private static String format(int number, int padding) {
         String.format("%0${padding}d", number)
     }
 
-    private List<Integer> splitNumbers(numbers) {
-        numbers.split("\\.").collect {
+    private static List<Integer> splitNumbers(String numbers) {
+        numbers.split(/\./).collect {
             try {
                 return Integer.valueOf(it)
             } catch (NumberFormatException e) {

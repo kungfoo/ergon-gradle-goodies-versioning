@@ -30,12 +30,12 @@ class DescribeVersionOptionsSpec extends Specification {
         describe().contains("--tags")
     }
 
-    def "options can toggle first parent only"() {
+    def "default options contain first parent only"() {
         expect:
         describe().contains("--first-parent")
     }
 
-    def "options can toggle first paren only"() {
+    def "options can toggle first paren only off"() {
         expect:
         !describe(firstParentOnly: false).contains("--first-parent")
     }

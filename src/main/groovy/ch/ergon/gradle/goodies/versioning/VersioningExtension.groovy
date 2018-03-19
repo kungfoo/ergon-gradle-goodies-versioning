@@ -204,9 +204,3 @@ class VersioningExtension {
     }
 }
 
-interface MonotonouslyIncreasingVersionNumber {
-    /**
-     * Calculate a monotonically rising version number on your own. Have fun.
-     */
-    long calculate(String version)
-}
