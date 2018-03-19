@@ -8,7 +8,6 @@ import ch.ergon.gradle.goodies.Eggs
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.nativeplatform.Repositories
 
 /**
  * Nice and concise versioning of your artifacts using git describe and your git tags.
@@ -59,13 +58,6 @@ class VersioningPlugin implements Plugin<Project> {
         return project.ergon.versioning.describeLongVersion()
     }
 
-//	boolean hasMainSourceSet(Project project) {
-//		// this has one of those plugins that defines a main sourceset
-//		project.plugins.hasPlugin(JavaBasePlugin) ||
-//		project.plugins.hasPlugin(GroovyBasePlugin) ||
-//		project.plugins.hasPlugin(ScalaBasePlugin)
-//	}
-
     /**
      * Will be executed when java, groovy or scala plugin is applied.
      */
@@ -95,6 +87,7 @@ class VersioningPlugin implements Plugin<Project> {
         }
     }
 
+    // TODO: ensure that the extension has an intermediates url and hook into maven deployer/publish plugin
     class PublishedProject implements Action<Plugin> {
         Project project
 
@@ -106,9 +99,10 @@ class VersioningPlugin implements Plugin<Project> {
                 project.logger.info("Using intermediate nexus repository!")
 
                 def credentials = {
-                    authentication(userName: Repositories.PUBLISHING_USERNAME, password: Repositories.PUBLISHING_PASSWORD)
+                    // TODO: get creddentials from maven deployer if even necessary.
+                    authentication(userName: "can has username", password: "can has password")
                 }
-                project.uploadArchives.repositories.mavenDeployer.repository(url: Repositories.INTERMEDIATES_URL, credentials)
+                project.uploadArchives.repositories.mavenDeployer.repository(url: project.ergon.versioning.intermediatesRepoUrl, credentials)
             }
         }
     }
