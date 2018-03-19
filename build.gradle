@@ -19,6 +19,10 @@ allprojects {
 	}
 }
 
+test {
+	inputs.files files("./versioning-test-data/")
+}
+
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
