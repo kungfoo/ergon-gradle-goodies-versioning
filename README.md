@@ -1,8 +1,37 @@
+# gradle goodies versioning plugin
+
+A plugin for dead-simple versioning of gradle projects
+using your git history and tags.
+
+No more file touching for any of your builds.
+
+Also supports android projects including generating
+the `versionNumber` from your history.
+
+Also adds a `version.properties` file to your
+assembled artifact for maximum traceability.
+You can use these files to easily figure out
+all versions of `.jar`s that are on the classpath.
+
+Makes for nice about screens. :)
+
+TODO: Add sample projects using this in
+
+- java project with multiple artifacts
+- simple android project
+ 
+
+# Where this came from
+
+This source code was graciously donated to me by @ergon: https://github.com/ergon,
+since I initially lost it while working there. The original history is lost, because
+there were other plugins that are not universally applicable.
+
 # Cloning this repo
 
 Since this repo now has a submodule, cloning should be done in one of the two following ways:
 
-    git clone  --recursive
+    git clone https://github.com/kungfoo/ergon-gradle-goodies-versioning.git --recursive
 
 or
     git clone path-to-repo.git
