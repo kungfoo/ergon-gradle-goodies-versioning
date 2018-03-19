@@ -1,4 +1,3 @@
-rootProject.name="ergon-gradle-goodies"
-//include 'egg-license'
+rootProject.name="ergon-gradle-goodies-versioning"
 include 'egg-base'
 
