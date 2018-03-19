@@ -4,6 +4,7 @@
 
 package ch.ergon.gradle.goodies.versioning
 
+import org.gradle.api.Project
 import spock.lang.Specification
 
 /**
@@ -13,11 +14,13 @@ import spock.lang.Specification
  */
 class DefaultMonotonouslyIncreasingVersionNumberSpec extends Specification {
 
-    VersioningPluginTestProject project
+    Project project
     DefaultMonotonouslyIncreasingVersionNumber v
 
     def setup() {
-        project = new VersioningPluginTestProject()
+        def pluginTestProject = new VersioningPluginTestProject()
+
+        project = pluginTestProject.project
         project.ergon.versioning.versionNumberPadding = 3
         v = new DefaultMonotonouslyIncreasingVersionNumber(project: project)
     }
@@ -31,7 +34,7 @@ class DefaultMonotonouslyIncreasingVersionNumberSpec extends Specification {
         versionNumber("1.0.1-12-g786312") == 1000001012
     }
 
-    def "returned version number should also work for more dotted version numbers"() {
+    def "returned version number should also work for longer dotted version numbers"() {
         expect:
         versionNumber("2.3.4.5.1-3-g12312") == 2003004005001003
     }
