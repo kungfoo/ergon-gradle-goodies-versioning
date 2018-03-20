@@ -1,5 +1,7 @@
 # gradle goodies versioning plugin
 
+[![Build Status](https://travis-ci.org/kungfoo/ergon-gradle-goodies-versioning.svg?branch=master)](https://travis-ci.org/kungfoo/ergon-gradle-goodies-versioning)
+
 A plugin for dead-simple versioning of gradle projects
 using your git history and tags.
 
