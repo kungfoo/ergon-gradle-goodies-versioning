@@ -8,7 +8,7 @@ No more file touching for any of your builds.
 Also supports android projects including generating
 the `versionNumber` from your history.
 
-Also adds a `version.properties` file to your
+It also adds a `version.properties` file to your
 assembled artifact for maximum traceability.
 You can use these files to easily figure out
 all versions of `.jar`s that are on the classpath.
@@ -24,8 +24,8 @@ TODO: Add sample projects using this in
 # Where this came from
 
 This source code was graciously donated to me by @ergon: https://github.com/ergon,
-since I initially lost it while working there. The original history is lost, because
-there were other plugins that are not universally applicable.
+since I initially wrote it while working there. It was of great use to us, so we figured
+it might also be useful for everyone else.
 
 # Cloning this repo
 
@@ -65,12 +65,10 @@ directory still had uncommitted changes).
 
 Since this project itself now uses the versioning plugin:
 
-- Update releasenotes and readme
+- Update release notes and readme
 - Commit
 - Create a tag
 - git push --tags
-- gradle uploadArchives releases the version described by
-  that tag.
-- or: use this job: http://jenkins.ergon.ch/job/ergon.gradle.goodies.release
+- release to the wild, wild web.
 - rinse, repeat.
 
