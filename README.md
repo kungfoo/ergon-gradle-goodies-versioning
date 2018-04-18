@@ -5,13 +5,15 @@
 A plugin for dead-simple versioning of gradle projects
 using your git history and tags.
 
-No more file touching for any of your builds.
+No more file touching for any of your build files or properties to set the version before a release.
 
 Also supports android projects including generating
-the `versionNumber` from your history.
+the `versionNumber` (a monotonously increasing number for android) from your history.
 
 It also adds a `version.properties` file to your
-assembled artifact for maximum traceability.
+assembled artifact for maximum traceability. This file is not time-stamped,
+so it does not interfere with up-to-date checks of gradle.
+
 You can use these files to easily figure out
 all versions of `.jar`s that are on the classpath.
 
