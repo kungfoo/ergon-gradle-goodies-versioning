@@ -1,17 +1,3 @@
-
-
 allprojects {
-	buildscript {
-		dependencies {
-			repositories {
-		      mavenLocal()
-		      maven {
-		      	url 'http://nexus.ergon.ch/content/groups/public'
-		      }
-		  }
-		  classpath (
-		      "ch.ergon:ergon-gradle-goodies:1.2.5"
-		  )
-		}
-	}
+
 }

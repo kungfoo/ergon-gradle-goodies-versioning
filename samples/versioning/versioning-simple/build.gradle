@@ -1,10 +1,8 @@
 // A sample project using the versioning plugin, simplest usage
 
-apply plugin: 'egg-versioning'
-
-defaultTasks 'version'
-
-task version.doLast {
-	println ergon.versioning.describeVersion()
+plugins {
+	id 'ch.ergon.gradle.goodies.versioning'
 }
+
+defaultTasks 'describeVersion'
 
