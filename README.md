@@ -17,9 +17,111 @@ all versions of `.jar`s that are on the classpath.
 
 Makes for nice about screens. :)
 
-TODO: Add sample projects using this in
+# Usage
 
-- java project with multiple artifacts
+The simplest usage is to just apply the plugin via the `plugins` block:
+
+```groovy
+plugins {
+    id "ch.ergon.gradle.goodies.versioning" version "${insert-plugin-version-here}"
+}
+```
+
+This is it, that's all there is to it. 🙌
+
+## More advanced usage
+
+This plugin allows for configuration, should you not be happy with the default or require special
+processing of the tags in your git history.
+
+### Always use the long format
+
+When executed directly on a tagged commit, by default the version will be that, the name of the tag. If you want
+to always use the _long_ version:
+
+```groovy
+ergon.versioning {
+    longFormat = true
+}
+```
+
+### Filtering tags that should be used
+
+Maybe you have more tags than are relevant strictly for versioning (of one artifact). Let's assume the
+ones that are relevant are like this:
+
+- `can-has-prefix-0.2.0.1`
+- `can-has-prefix-0.4.5`
+- ...
+
+You can match only these tags using:
+
+```groovy
+ergon.versioning {
+    match = 'can-has-prefix-*'
+}
+```
+
+### Use only annotated tags
+
+```groovy
+ergon.versioning {
+    annotatedTagsOnly = true
+}
+```
+
+### Post process the `describe` string from git
+
+```groovy
+ergon.versioning {
+    // returns 1.3.4-f76423 instead of 1.3.4-19-gf76423
+    postProcessVersion = ch.ergon.gradle.goodies.versioning.PostProcessVersion.STRIP_NR_COMMITS_AND_G
+}
+```
+
+Or bring your own code:
+
+```groovy
+ergon.versioning {
+    postProcessVersion = { version -> doMagicWithVersion(version) }
+}
+```
+
+### Not trimming the prefix when matching
+
+By default, this plugin trims the prefix when using the `match` option, such that
+
+```groovy
+ergon.versioning {
+    match = 'api-*'
+}
+```
+
+would use the tags and then produce the following versions:
+- `api-1.3.4` yields `1.3.4`
+- `api-5.3.2` plus 5 commits yields `5.3.2-5-gf71872`
+
+If you want to deal with the prefix differently, provide some code to do it:
+
+```groovy
+ergon.versioning {
+    replaceGlobWith = { matchedTag -> doSomeMoreMagicWithTheMatchedTag(matchedTag) }
+}
+```
+
+You can also turn off replacement of the tags by using:
+
+```groovy
+ergon.versioning {
+    replaceGlobWith = ch.ergon.gradle.goodies.versioning.GlobReplace.NO_REPLACE
+}
+```
+
+# TODO
+
+Add more sample projects using this in
+
+- java project with multiple artifacts and tags
 - simple android project
  
 
