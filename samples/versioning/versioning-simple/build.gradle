@@ -1,7 +1,7 @@
 // A sample project using the versioning plugin, simplest usage
 
 plugins {
-	id 'ch.ergon.gradle.goodies.versioning'
+    id "ch.ergon.gradle.goodies.versioning" version "0.0.0-21-g97656ba"
 }
 
 defaultTasks 'describeVersion'
