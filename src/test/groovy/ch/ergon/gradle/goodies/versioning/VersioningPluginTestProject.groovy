@@ -41,7 +41,7 @@ class VersioningPluginTestProject {
                 .withProjectDir(tempDir)
                 .build()
 
-        project.apply(plugin: 'egg-versioning')
+        project.apply(plugin: 'ch.ergon.gradle.goodies.versioning')
     }
 
     String version(options = [:]) {

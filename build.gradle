@@ -8,7 +8,7 @@ plugins {
 allprojects {
 
 	// Let's eat our own dog food (cannot be part of plugins block, though).
-	apply plugin: 'egg-versioning'
+	apply plugin: ch.ergon.gradle.goodies.versioning.VersioningPlugin
 	group = 'ch.ergon'
 
 	repositories {
