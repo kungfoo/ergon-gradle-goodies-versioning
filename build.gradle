@@ -2,6 +2,7 @@
 plugins {
 	id 'groovy'
 	id 'java-gradle-plugin'
+	id "com.gradle.plugin-publish" version "0.9.10"
 }
 
 allprojects {
@@ -28,17 +29,34 @@ targetCompatibility = '1.7'
 
 dependencies {
 	compile gradleApi()
-	compile project('egg-base')
-
 	compile "org.codehaus.groovy:groovy-all:2.4.12"
 
+	compile project('egg-base')
+
 	testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
-
-	// optional dependencies of spock
-//	testCompile "org.hamcrest:hamcrest-core:1.3" // only necessary if Hamcrest matchers are used
-//	testRuntime "net.bytebuddy:byte-buddy:1.6.5"          // allows mocking of classes (in addition to interfaces)
-//	testRuntime "org.objenesis:objenesis:2.5.1" // allows mocking of classes without default constructor (together with CGLIB)
-
 	testCompile 'org.eclipse.jgit:org.eclipse.jgit:4.5.4.201711221230-r'
 }
 
+
+gradlePlugin {
+	plugins {
+		versioningPlugin {
+			id = 'ch.ergon.gradle.goodies.versioning'
+			implementationClass = 'ch.ergon.gradle.goodies.versioning.VersioningPlugin'
+		}
+	}
+}
+
+pluginBundle {
+	vcsUrl = 'https://github.com/kungfoo/ergon-gradle-goodies-versioning'
+	description = 'Simple and automatic versioning from your git history for your java and android projects.'
+	tags = ['versioning', 'git', 'java', 'android']
+
+	plugins {
+		versioningPlugin {
+			displayName = 'Simple and automatic versioning from your git history for your java and android projects.'
+			id = 'ch.ergon.gradle.goodies.versioning'
+			website = 'https://github.com/kungfoo/ergon-gradle-goodies-versioning'
+		}
+	}
+}
