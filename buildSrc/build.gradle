@@ -20,8 +20,8 @@ def relativeFile(String path) {
 
 sourceSets {
 	main {
-		java.srcDirs relativeFile('src/main/java'), relativeFile('egg-base/src/main/java')
-		groovy.srcDirs relativeFile('src/main/groovy'), relativeFile('egg-base/src/main/groovy')
-		resources.srcDirs relativeFile('src/main/resources'), relativeFile('egg-base/src/main/resources')
+		java.srcDirs relativeFile('src/main/java')
+		groovy.srcDirs relativeFile('src/main/groovy')
+		resources.srcDirs relativeFile('src/main/resources')
 	}
 }

@@ -31,12 +31,9 @@ dependencies {
 	compile gradleApi()
 	compile "org.codehaus.groovy:groovy-all:2.4.12"
 
-	compile project('egg-base')
-
 	testCompile "org.spockframework:spock-core:1.1-groovy-2.4"
 	testCompile 'org.eclipse.jgit:org.eclipse.jgit:4.5.4.201711221230-r'
 }
-
 
 gradlePlugin {
 	plugins {

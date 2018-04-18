@@ -61,7 +61,7 @@ class VersioningPlugin implements Plugin<Project> {
     /**
      * Will be executed when java, groovy or scala plugin is applied.
      */
-    class ProjectWithSourceSet implements Action<Plugin> {
+    class ConfigureProjectWithSourceSet implements Action<Plugin> {
         Project project
 
         def generateVersionPropertiesTaskName = 'generateVersionProperties'
@@ -88,7 +88,7 @@ class VersioningPlugin implements Plugin<Project> {
     }
 
     // TODO: ensure that the extension has an intermediates url and hook into maven deployer/publish plugin
-    class PublishedProject implements Action<Plugin> {
+    class ConfigurePublishedProject implements Action<Plugin> {
         Project project
 
         @Override
@@ -110,16 +110,16 @@ class VersioningPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         Eggs.getExtension(project).create('versioning', VersioningExtension, project)
-        def projectWithSourceSet = new ProjectWithSourceSet(project: project)
+        def configureProjectWithSourceSet = new ConfigureProjectWithSourceSet(project: project)
 
         // trigger on plugins with source sets
         ['scala', 'groovy', 'kotlin', 'java'].each { id ->
-            project.plugins.withId(id, projectWithSourceSet)
+            project.plugins.withId(id, configureProjectWithSourceSet)
         }
 
         // there is no egg-publish here...
 //        // trigger on egg-publish
-//        project.plugins.withId('egg-publish', new PublishedProject(project: project))
+//        project.plugins.withId('egg-publish', new ConfigurePublishedProject(project: project))
 
         project.task(
                 group: 'versioning',
