@@ -21,7 +21,7 @@ class VersioningPluginPostprocessingSpec extends Specification {
         project = new VersioningPluginTestProject()
     }
 
-    void checkout(sha) {
+    void checkout(String sha) {
         project.checkout(sha)
     }
 
