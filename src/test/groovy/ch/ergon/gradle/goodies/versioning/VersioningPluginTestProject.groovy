@@ -67,6 +67,12 @@ class VersioningPluginTestProject {
         repo.reset().setMode(ResetCommand.ResetType.HARD).call()
     }
 
+    void createFile(String filePath, String content) {
+        def file = project.file(filePath)
+        file.createNewFile()
+        file.write(content)
+    }
+
     void apply(plugins) {
         project.apply plugins
     }
