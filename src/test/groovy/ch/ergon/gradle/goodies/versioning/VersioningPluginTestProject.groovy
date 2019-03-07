@@ -5,6 +5,7 @@
 package ch.ergon.gradle.goodies.versioning
 
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.ResetCommand
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 
@@ -59,10 +60,17 @@ class VersioningPluginTestProject {
         project.ergon.versioning.exactMatch()
     }
 
-    void checkout(sha) {
-        project.exec {
-            commandLine 'git', 'checkout', "${sha}"
-        }
+    void checkout(String sha) {
+        def repo = Git.open(project.rootDir)
+        repo.checkout().setName(sha).call()
+        repo.clean().setCleanDirectories(true).call()
+        repo.reset().setMode(ResetCommand.ResetType.HARD).call()
+    }
+
+    void createFile(String filePath, String content) {
+        def file = project.file(filePath)
+        file.createNewFile()
+        file.write(content)
     }
 
     void apply(plugins) {

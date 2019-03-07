@@ -105,6 +105,15 @@ class VersioningPluginSpec extends Specification {
         !exactMatch()
     }
 
+    def "dirty projects should be described as -dirty"() {
+        when:
+        checkout ON_TAG
+        project.createFile("./snip.txt", "Sample dirty file.")
+
+        then:
+        version().endsWith("-dirty")
+    }
+
     @Ignore("This test is ignored until we have figured out how to do the intermediate/snapshot repository outside of ergon.")
     def "nexus repository url is intermediate repo when not on a tag"() {
         when:

@@ -4,7 +4,9 @@
 
 package ch.ergon.gradle.goodies.versioning
 
+import ch.ergon.gradle.goodies.versioning.jgit.JGitDescribe
 import groovy.transform.AutoClone
+import org.eclipse.jgit.api.Git
 import org.gradle.api.Project
 
 /**
@@ -19,7 +21,7 @@ class VersioningExtension {
     /**
      * The match clause that is used to match the tags describing this projects version.
      */
-    String match = null
+    String match = ""
 
     /**
      * How to figure out the version from the matched tag. Default is to trim the prefix.
@@ -75,17 +77,16 @@ class VersioningExtension {
      * For all options, @See DescribeVersionOptions
      **/
     String describeVersion() {
-        def command = describeCommand()
+        def jgitDescribe = new JGitDescribe(Git.open(project.rootDir))
+        def tag = jgitDescribe.describe(
+                prefix: match?.replace('*', ""),
+                longFormat: longFormat
+        )
 
-        if (match) {
-            def tag = figureOutVersion(project, command)
-            return applyPostProcessing(
-                    replaceGlobWith(match, tag)
-            )
+        if(match) {
+            return applyPostProcessing(replaceGlobWith(match, tag))
         } else {
-            return applyPostProcessing(
-                    figureOutVersion(project, command)
-            )
+            applyPostProcessing(tag)
         }
     }
 
