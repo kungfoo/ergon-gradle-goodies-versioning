@@ -6,6 +6,7 @@ package ch.ergon.gradle.goodies.versioning
 
 import ch.ergon.gradle.goodies.versioning.jgit.JGitDescribe
 import groovy.transform.AutoClone
+import groovy.transform.Memoized
 import org.eclipse.jgit.api.Git
 import org.gradle.api.Project
 
@@ -76,6 +77,7 @@ class VersioningExtension {
      *
      * For all options, @See DescribeVersionOptions
      **/
+    @Memoized
     String describeVersion() {
         def jgitDescribe = new JGitDescribe(Git.open(project.rootDir))
         def tag = jgitDescribe.describe(
@@ -98,6 +100,7 @@ class VersioningExtension {
      * Takes all options and calculates the long version with them, so
      * longFormat is always set to true.
      **/
+    @Memoized
     String describeLongVersion() {
         def cloned = this.clone()
         cloned.longFormat = true
@@ -118,68 +121,9 @@ class VersioningExtension {
      * Returns true, if HEAD is currently pointing at a commit that has a tag (that matches
      * the options of git describe).
      **/
+    @Memoized
     boolean exactMatch() {
-        def stdErr = new ByteArrayOutputStream()
-        def stdOut = new ByteArrayOutputStream()
-
-        def command = exactMatchCommand()
-        def result = project.exec {
-            commandLine = command
-            ignoreExitValue = true
-            errorOutput = stdErr
-            standardOutput = stdOut
-        }
-        project.logger.debug("stdout ouptut of $command was: ${stdOut.toString()}")
-        project.logger.debug("stderr ouptut of $command was: ${stdErr.toString()}")
-
-        return result.exitValue == 0
-    }
-
-    private String[] exactMatchCommand() {
-        List<String> command = [
-                'git', 'describe', '--exact-match', 'HEAD'
-        ]
-        return (command + options()).toArray()
-    }
-
-    private String[] describeCommand() {
-        List<String> command = [
-                'git',
-                'describe',
-                '--always',
-                '--dirty'
-        ]
-        return (command + options()).toArray()
-    }
-
-    private List<String> options() {
-        def result = []
-        if (!annotatedTagsOnly) {
-            result <<= '--tags'
-        }
-        if (firstParentOnly) {
-            result <<= '--first-parent'
-        }
-        if (match) {
-            result <<= "--match=${match}"
-        }
-        if (longFormat) {
-            result <<= "--long"
-        }
-        return result
-    }
-
-    private String figureOutVersion(Project project, String... command) {
-        execute(project, command)
-    }
-
-    private def execute(Project project, String... command) {
-        def stdout = new ByteArrayOutputStream()
-        project.exec {
-            commandLine(command)
-            standardOutput = stdout
-        }
-        return stdout.toString().trim()
+        new JGitDescribe(Git.open(project.rootDir)).exactMatch()
     }
 
     /**

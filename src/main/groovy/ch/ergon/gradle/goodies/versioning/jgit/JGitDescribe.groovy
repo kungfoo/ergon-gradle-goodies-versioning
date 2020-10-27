@@ -2,6 +2,7 @@ package ch.ergon.gradle.goodies.versioning.jgit
 
 
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.api.Status
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.lib.Repository
@@ -25,30 +26,40 @@ class JGitDescribe implements GitDescribe {
 
     @Override
     String describe(Map options) {
+        def result = null
         try {
-            ObjectId headObjectId = git.repository.resolve(Constants.HEAD)
-            String abbrevHead = git.repository.newObjectReader().abbreviate(headObjectId).name()
-
-            List<String> revs = revList(headObjectId)
+            def head = git.repository.resolve(Constants.HEAD)
+            String abbrevHead = git.repository.newObjectReader().abbreviate(head).name()
 
             Map<String, RefWithTagName> commitHashToTag = mapCommitsToTags(git)
 
-            for (int depth = 0; depth < revs.size(); depth++) {
-                String rev = revs.get(depth)
-                if (commitHashToTag.containsKey(rev)) {
-                    String exactTag = commitHashToTag[rev].tag
-                    if (exactTag.startsWith(options.prefix ?: "")) {
-                        String result = String.format("%s-%s-g%s", exactTag, depth, abbrevHead)
-                        if (!options.longFormat == true) {
-                            result = depth == 0 ? exactTag : result
+            new RevWalk(git.repository).withCloseable{walk ->
+                walk.retainBody = false
+                RevCommit commit = walk.parseCommit(head)
+                int depth = 0
+
+                while (commit.parents != null && commit.parents.length != 0) {
+                    String oid = commit.name()
+
+                    if (commitHashToTag.containsKey(oid)) {
+                        String exactTag = commitHashToTag[oid].tag
+                        if (exactTag.startsWith(options.prefix ?: "")) {
+                            result = String.format("%s-%s-g%s", exactTag, depth, abbrevHead)
+                            if (!options.longFormat) {
+                                result = depth == 0 ? exactTag : result
+                            }
+                            Status status = git.status().call()
+                            result = status.isClean() ? result : String.format("%s-dirty", result)
+                            break;
                         }
-                        def status = git.status().call()
-                        return status.isClean() ? result : String.format("%s-dirty", result)
                     }
+
+                    RevCommit[] parents = commit.parents
+                    commit = walk.parseCommit(parents[0])
+                    depth++
                 }
             }
-
-            return abbrevHead
+            return result
 
         } catch (Exception e) {
             log.debug("JGit describe failed with {}", e)
@@ -56,37 +67,21 @@ class JGitDescribe implements GitDescribe {
         }
     }
 
-    // Mimics 'git rev-list --first-parent <commit>'
-    private List<String> revList(ObjectId initialObjectId) throws IOException {
-        def revs = []
-
-        Repository repo = git.getRepository()
-        new RevWalk(repo).withCloseable() { walk ->
-            walk.setRetainBody(false)
-            RevCommit head = walk.parseCommit(initialObjectId)
-
-            while (true) {
-                revs.add(head.getName())
-
-                RevCommit[] parents = head.getParents()
-                if (parents == null || parents.length == 0) {
-                    break
-                }
-
-                head = walk.parseCommit(parents[0])
-            }
-        }
-        return revs
+    @Override
+    boolean exactMatch() {
+        def head = git.repository.resolve(Constants.HEAD)
+        Map<String, RefWithTagName> commitHashToTag = mapCommitsToTags(git)
+        return commitHashToTag.containsKey(head.name())
     }
 
     // Maps all commits returned by 'git show-ref --tags -d' to output of 'git describe --tags --exact-match <commit>'
-    private Map mapCommitsToTags(Git git) {
+    private static Map<String, RefWithTagName> mapCommitsToTags(Git git) {
         RefWithTagNameComparator comparator = new RefWithTagNameComparator(git)
 
         // Maps commit hash to list of all refs pointing to given commit hash.
         // All keys in this map should be same as commit hashes in 'git show-ref --tags -d'
-        Map commitHashToTag = [:]
-        Repository repository = git.getRepository()
+        Map<String, RefWithTagName> commitHashToTag = [:]
+        Repository repository = git.repository
 
         def tags = repository.refDatabase.getRefsByPrefix(Constants.R_TAGS)
         tags.each { tag ->
@@ -107,8 +102,8 @@ class JGitDescribe implements GitDescribe {
         return commitHashToTag
     }
 
-    private void updateCommitHashMap(Map<String, RefWithTagName> map, RefWithTagNameComparator comparator,
-                                       ObjectId objectId, RefWithTagName ref) {
+    private static void updateCommitHashMap(Map<String, RefWithTagName> map, RefWithTagNameComparator comparator,
+                                            ObjectId objectId, RefWithTagName ref) {
         // Smallest ref (ordered by this comparator) from list of refs is chosen for each commit.
         // This ensures we get same behavior as in 'git describe --tags --exact-match <commit>'
         String commitHash = objectId.getName()

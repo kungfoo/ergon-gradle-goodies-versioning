@@ -41,7 +41,7 @@ class DefaultMonotonouslyIncreasingVersionNumberSpec extends Specification {
 
     def "version number should also work for short version strings"() {
         expect:
-        number == v.calculate(versionString)
+        new Long(number) == v.calculate(versionString)
 
         where:
         versionString   | number
