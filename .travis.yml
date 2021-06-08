@@ -1,8 +1,11 @@
 language: java
 
+git:
+  submodules: true
+
 jdk:
-  - oraclejdk8
   - openjdk8
+  - openjdk11
 
 os:
   - linux
