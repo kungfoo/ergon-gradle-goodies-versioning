@@ -42,7 +42,7 @@ When executed directly on a tagged commit, by default the version will be that, 
 to always use the _long_ version:
 
 ```groovy
-ergon.versioning {
+versioning {
     longFormat = true
 }
 ```
@@ -59,7 +59,7 @@ ones that are relevant are like this:
 You can match only these tags using:
 
 ```groovy
-ergon.versioning {
+versioning {
     match = 'can-has-prefix-*'
 }
 ```
@@ -67,7 +67,7 @@ ergon.versioning {
 ### Use only annotated tags
 
 ```groovy
-ergon.versioning {
+versioning {
     annotatedTagsOnly = true
 }
 ```
@@ -75,7 +75,7 @@ ergon.versioning {
 ### Post process the `describe` string from git
 
 ```groovy
-ergon.versioning {
+versioning {
     // returns 1.3.4-f76423 instead of 1.3.4-19-gf76423
     postProcessVersion = ch.ergon.gradle.goodies.versioning.PostProcessVersion.STRIP_NR_COMMITS_AND_G
 }
@@ -84,7 +84,7 @@ ergon.versioning {
 Or bring your own code:
 
 ```groovy
-ergon.versioning {
+versioning {
     postProcessVersion = { version -> doMagicWithVersion(version) }
 }
 ```
@@ -94,7 +94,7 @@ ergon.versioning {
 By default, this plugin trims the prefix when using the `match` option, such that
 
 ```groovy
-ergon.versioning {
+versioning {
     match = 'api-*'
 }
 ```
@@ -106,7 +106,7 @@ would use the tags and then produce the following versions:
 If you want to deal with the prefix differently, provide some code to do it:
 
 ```groovy
-ergon.versioning {
+versioning {
     replaceGlobWith = { matchedTag -> doSomeMoreMagicWithTheMatchedTag(matchedTag) }
 }
 ```
@@ -114,7 +114,7 @@ ergon.versioning {
 You can also turn off replacement of the tags by using:
 
 ```groovy
-ergon.versioning {
+versioning {
     replaceGlobWith = ch.ergon.gradle.goodies.versioning.GlobReplace.NO_REPLACE
 }
 ```
