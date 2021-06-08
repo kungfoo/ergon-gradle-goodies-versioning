@@ -29,7 +29,7 @@ import org.eclipse.jgit.revwalk.*;
  * Given a commit, show the most recent tag that is reachable from a commit. If a commit has multiple parent commits,
  * only consider the first one (match the behavior of "git describe --first-parent").
  * <p>
- * Based on the org.eclipse.jgit.api.DescribeCommand.<br/>
+ * Based on the org.eclipse.jgit.api.DescribeCommand.<br>
  * Main differences are:
  * <ul>
  * <li>Supports first-parent traversal</li>
@@ -133,7 +133,10 @@ public class BetterDescribeCommand extends GitCommand<String> {
 	}
 
 	/**
-	 * Set firstparent to the specified value.
+	 * Set first parent to the specified value.
+	 * 
+	 * @param firstParent the firstParent value to use.
+	 * @return {@code this}
 	 */
 	public BetterDescribeCommand setFirstParent(boolean firstParent) {
 		w.setFirstParent(firstParent);
@@ -267,7 +270,7 @@ public class BetterDescribeCommand extends GitCommand<String> {
 			// combined flags of all the candidate instances
 			final RevFlagSet allFlags = new RevFlagSet();
 
-			/**
+			/*
 			 * Tracks the depth of each tag as we find them.
 			 */
 			class Candidate {
@@ -369,7 +372,7 @@ public class BetterDescribeCommand extends GitCommand<String> {
 				return always ? w.getObjectReader().abbreviate(target).name() : null;
 			}
 
-			Candidate best = Collections.min(candidates, (Candidate o1, Candidate o2) -> o1.depth - o2.depth);
+			Candidate best = Collections.min(candidates, Comparator.comparingInt((Candidate o) -> o.depth));
 
 			return best.describe(target);
 		} catch (IOException e) {
