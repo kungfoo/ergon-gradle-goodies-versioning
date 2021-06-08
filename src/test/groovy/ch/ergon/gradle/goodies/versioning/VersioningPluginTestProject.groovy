@@ -77,17 +77,17 @@ class VersioningPluginTestProject {
 
 	String version(options = [:]) {
 		options.each { k,v ->
-			project.ergon.versioning[k] = v
+			project.versioning[k] = v
 		}
-		return project.ergon.versioning.describeVersion()
+		return project.versioning.describeVersion()
 	}
 
 	String longVersion() {
-		project.ergon.versioning.describeLongVersion()
+		project.versioning.describeLongVersion()
 	}
 
 	boolean exactMatch() {
-		project.ergon.versioning.exactMatch()
+		project.versioning.exactMatch()
 	}
 
 	void checkout(sha) {

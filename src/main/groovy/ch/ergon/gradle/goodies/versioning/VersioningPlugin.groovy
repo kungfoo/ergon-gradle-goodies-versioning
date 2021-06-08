@@ -3,7 +3,7 @@
 */
 package ch.ergon.gradle.goodies.versioning
 
-import ch.ergon.gradle.goodies.Eggs
+
 import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -54,7 +54,7 @@ class VersioningPlugin implements Plugin<Project> {
 	}
 
 	def figureOutLongVersion(Project project) {
-		return project.ergon.versioning.describeLongVersion()
+		return project.versioning.describeLongVersion()
 	}
 
 	/**
@@ -85,29 +85,9 @@ class VersioningPlugin implements Plugin<Project> {
 		}
 	}
 
-	// TODO: ensure that the extension has an intermediates url and hook into maven deployer/publish plugin
-	class ConfigurePublishedProject implements Action<Plugin> {
-		Project project
-
-		@Override
-		void execute(Plugin plugin) {
-			project.logger.info("Applied egg-publish and egg-versioning on $project, reconfiguring nexus urls...")
-
-			if (!project.ergon.versioning.exactMatch()) {
-				project.logger.info("Using intermediate nexus repository!")
-
-				def credentials = {
-					// TODO: get creddentials from maven deployer if even necessary.
-					authentication(userName: "can has username", password: "can has password")
-				}
-				project.uploadArchives.repositories.mavenDeployer.repository(url: project.ergon.versioning.intermediatesRepoUrl, credentials)
-			}
-		}
-	}
-
 	@Override
 	void apply(Project project) {
-		Eggs.getExtension(project).create('versioning', VersioningExtension, project)
+		project.getExtensions().create('versioning', VersioningExtension, project)
 		def configureProjectWithSourceSet = new ConfigureProjectWithSourceSet(project: project)
 
 		// trigger on plugins with source sets
@@ -119,11 +99,6 @@ class VersioningPlugin implements Plugin<Project> {
 		].each { id ->
 			project.plugins.withId(id, configureProjectWithSourceSet)
 		}
-
-		// there is no egg-publish here...
-		//        // trigger on egg-publish
-		//        project.plugins.withId('egg-publish', new ConfigurePublishedProject(project: project))
-
 		project.task(
 				group: 'versioning',
 				description: 'Output the version that would be used when building.',
@@ -138,11 +113,11 @@ class VersioningPlugin implements Plugin<Project> {
 
 		// now define the version, after we read all the config.
 		project.afterEvaluate {
-			def version = project.ergon.versioning.describeVersion()
+			def version = project.versioning.describeVersion()
 			project.logger.info("Project version is: $version")
 			project.version = version
 
-			project.ext.versionNumber = project.ergon.versioning.versionNumber()
+			project.ext.versionNumber = project.versioning.versionNumber()
 		}
 	}
 }

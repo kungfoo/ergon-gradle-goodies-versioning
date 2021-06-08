@@ -18,7 +18,7 @@ class DefaultMonotonouslyIncreasingVersionNumberSpec extends BuildConfigurationS
 	MonotonouslyIncreasingVersionNumber v = new DefaultMonotonouslyIncreasingVersionNumber(project: project)
 
 	def setup() {
-		project.ergon.versioning.versionNumberPadding = 3
+		project.versioning.versionNumberPadding = 3
 	}
 
 	def versionNumber(String longDescribeFormat) {
@@ -100,7 +100,7 @@ class DefaultMonotonouslyIncreasingVersionNumberSpec extends BuildConfigurationS
 
 	def "version should be shorter and convert to an int with less padding" () {
 		given:
-		project.ergon.versioning.versionNumberPadding = 2
+		project.versioning.versionNumberPadding = 2
 		def tag = "3.2.1-12-g6723"
 		def expectedLong = 3020112L
 
@@ -111,7 +111,7 @@ class DefaultMonotonouslyIncreasingVersionNumberSpec extends BuildConfigurationS
 
 	def "version number should also work with more padding" () {
 		given:
-		project.ergon.versioning.versionNumberPadding = 4
+		project.versioning.versionNumberPadding = 4
 
 		expect:
 		versionNumber("10.2.3-0-g7387") == 10000200030000L
@@ -127,7 +127,7 @@ class DefaultMonotonouslyIncreasingVersionNumberSpec extends BuildConfigurationS
 
 	def "version number should not choke on prefix that is matched" () {
 		given:
-		project.ergon.versioning.match = "version-*"
+		project.versioning.match = "version-*"
 		def tag = "version-1.9.2"
 
 		expect:

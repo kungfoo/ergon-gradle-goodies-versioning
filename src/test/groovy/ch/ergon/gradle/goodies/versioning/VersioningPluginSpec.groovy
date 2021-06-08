@@ -82,7 +82,7 @@ class VersioningPluginSpec extends VersioningPluginSpecification {
 		apply plugin: 'ch.ergon.gradle.goodies.versioning'
 
 		expect:
-		project.project.ergon.versioning != null
+		project.project.versioning != null
 	}
 
 	def "long version should be the same as non-tag version" () {

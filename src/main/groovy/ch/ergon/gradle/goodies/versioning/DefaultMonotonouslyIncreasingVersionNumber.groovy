@@ -15,12 +15,12 @@ class DefaultMonotonouslyIncreasingVersionNumber implements MonotonouslyIncreasi
 	Project project
 
 	long calculate() {
-		return calculate(project.ergon.versioning.describeLongVersion())
+		return calculate(project.versioning.describeLongVersion())
 	}
 
 	@Override
 	long calculate(String version) {
-		int padding = project.ergon.versioning.versionNumberPadding
+		int padding = project.versioning.versionNumberPadding
 
 		try {
 			project.logger.info("Figuring out monotonously increasing version number for version $version")
