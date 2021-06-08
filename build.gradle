@@ -1,18 +1,19 @@
 
+
 plugins {
 	id 'groovy'
 	id 'java-gradle-plugin'
 	id "com.gradle.plugin-publish" version "0.9.10"
+	id "com.diffplug.spotless" version "5.12.5"
 }
 
 allprojects {
-
 	// Let's eat our own dog food (cannot be part of plugins block, though).
 	apply plugin: ch.ergon.gradle.goodies.versioning.VersioningPlugin
 	group = 'ch.ergon'
 
 	repositories {
-		jcenter()
+		mavenCentral()
 	}
 
 	test {
@@ -24,15 +25,42 @@ test {
 	inputs.files files("./versioning-test-data/")
 }
 
+spotless {
+	java {
+		eclipse().configFile(
+				file("${project.rootDir}/config/eclipse/org.eclipse.jdt.ui.prefs"),
+				file("${project.rootDir}/config/eclipse/org.eclipse.jdt.core.prefs")
+				)
+		licenseHeaderFile(file("$project.rootDir/config/header.txt"))
+		importOrder()
+		removeUnusedImports()
+	}
+
+	groovy {
+		greclipse()
+		licenseHeaderFile(file("$project.rootDir/config/header.txt"))
+		indentWithTabs()
+	}
+
+	groovyGradle {
+		greclipse()
+		indentWithTabs()
+	}
+}
+
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
+test {
+	useJUnitPlatform()
+}
+
 dependencies {
 	implementation gradleApi()
-	implementation "org.codehaus.groovy:groovy-all:2.5.4"
+	implementation "org.codehaus.groovy:groovy-all:3.0.7"
 	implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: jgitVersion
 
-	testCompile "org.spockframework:spock-core:1.2-groovy-2.5"
+	testImplementation "org.spockframework:spock-core:2.0-groovy-3.0"
 }
 
 gradlePlugin {
@@ -47,7 +75,12 @@ gradlePlugin {
 pluginBundle {
 	vcsUrl = 'https://github.com/kungfoo/ergon-gradle-goodies-versioning'
 	description = 'Simple and automatic versioning from your git history for your java and android projects.'
-	tags = ['versioning', 'git', 'java', 'android']
+	tags = [
+		'versioning',
+		'git',
+		'java',
+		'android'
+	]
 
 	plugins {
 		versioningPlugin {
