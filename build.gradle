@@ -3,8 +3,9 @@
 plugins {
 	id 'groovy'
 	id 'java-gradle-plugin'
-	id "com.gradle.plugin-publish" version "0.9.10"
-	id "com.diffplug.spotless" version "5.12.5"
+	id 'maven-publish'
+	id "com.gradle.plugin-publish" version "0.15.0"
+	id 'com.diffplug.spotless' version '5.12.5'
 }
 
 allprojects {
@@ -61,6 +62,17 @@ dependencies {
 	implementation group: 'org.eclipse.jgit', name: 'org.eclipse.jgit', version: jgitVersion
 
 	testImplementation "org.spockframework:spock-core:2.0-groovy-3.0"
+}
+
+publishing {
+	publications {
+		pluginPublication (MavenPublication) {
+			from    components.java
+			groupId    project.group
+			artifactId    "ergon-gradle-goodies-versioning"
+			version    project.version
+		}
+	}
 }
 
 gradlePlugin {
