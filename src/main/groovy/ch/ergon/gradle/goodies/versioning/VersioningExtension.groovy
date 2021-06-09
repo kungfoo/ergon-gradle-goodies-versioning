@@ -3,6 +3,7 @@
 */
 package ch.ergon.gradle.goodies.versioning
 
+import ch.ergon.gradle.goodies.versioning.jgit.DescribeOptions
 import ch.ergon.gradle.goodies.versioning.jgit.JGitDescribe
 import groovy.transform.AutoClone
 import groovy.transform.Memoized
@@ -85,15 +86,8 @@ class VersioningExtension {
 	@Memoized
 	String describeVersion() {
 		def jgitDescribe = new JGitDescribe(findGitRepo())
-		def tag = jgitDescribe.describe(
-				match: match,
-				longFormat: longFormat,
-				annotatedTagsOnly: annotatedTagsOnly,
-
-				firstParentOnly: firstParentOnly,
-				abbreviate: abbreviate
-				)
-
+		def options = new DescribeOptions(match, longFormat, annotatedTagsOnly, firstParentOnly, abbreviate);
+		def tag = jgitDescribe.describe(options)
 		if(match) {
 			return applyPostProcessing(replaceGlobWith(match, tag))
 		} else {

@@ -64,17 +64,6 @@ dependencies {
 	testImplementation "org.spockframework:spock-core:2.0-groovy-3.0"
 }
 
-publishing {
-	publications {
-		pluginPublication (MavenPublication) {
-			from    components.java
-			groupId    project.group
-			artifactId    "ergon-gradle-goodies-versioning"
-			version    project.version
-		}
-	}
-}
-
 gradlePlugin {
 	plugins {
 		versioningPlugin {
