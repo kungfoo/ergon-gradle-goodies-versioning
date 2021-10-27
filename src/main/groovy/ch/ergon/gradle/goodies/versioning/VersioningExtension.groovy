@@ -85,10 +85,14 @@ class VersioningExtension {
 	**/
 	@Memoized
 	String describeVersion() {
+		def options = new DescribeOptions(match, longFormat, annotatedTagsOnly, firstParentOnly, abbreviate)
+		return describeInternally(options)
+	}
+
+	private String describeInternally(DescribeOptions options) {
 		def jgitDescribe = new JGitDescribe(findGitRepo())
-		def options = new DescribeOptions(match, longFormat, annotatedTagsOnly, firstParentOnly, abbreviate);
 		def tag = jgitDescribe.describe(options)
-		if(match) {
+		if (match) {
 			return applyPostProcessing(replaceGlobWith(match, tag))
 		} else {
 			applyPostProcessing(tag)
@@ -120,9 +124,8 @@ class VersioningExtension {
 	**/
 	@Memoized
 	String describeLongVersion() {
-		def cloned = this.clone()
-		cloned.longFormat = true
-		cloned.describeVersion()
+		def options = new DescribeOptions(match, true, annotatedTagsOnly, firstParentOnly, abbreviate);
+		return describeInternally(options)
 	}
 
 	/**

@@ -163,6 +163,19 @@ class VersioningPluginSpec extends VersioningPluginSpecification {
 		exactMatch()
 	}
 
+	def "one should be able to first get the long version and then the short version when on a tag" () {
+		when:
+		apply plugin: 'ch.ergon.gradle.goodies.versioning'
+
+		and:
+		checkout ON_TAG
+
+		then:
+		exactMatch()
+		longVersion() == "1.0.2-0-g38a4393"
+		version() == "1.0.2"
+	}
+
 	def "early version(annotatedTagsOnly: true) should find annotated tags on first parent and use them" () {
 		when:
 		apply plugin: 'ch.ergon.gradle.goodies.versioning'

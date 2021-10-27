@@ -76,14 +76,19 @@ class VersioningPluginTestProject {
 	}
 
 	String version(options = [:]) {
-		options.each { k,v ->
-			project.versioning[k] = v
-		}
+		applyOptions(options)
 		return project.versioning.describeVersion()
 	}
 
-	String longVersion() {
-		project.versioning.describeLongVersion()
+	String longVersion(options = [:]) {
+		applyOptions(options)
+		return project.versioning.describeLongVersion()
+	}
+
+	private void applyOptions(options = [:]) {
+		options.each { k,v ->
+			project.versioning[k] = v
+		}
 	}
 
 	boolean exactMatch() {
