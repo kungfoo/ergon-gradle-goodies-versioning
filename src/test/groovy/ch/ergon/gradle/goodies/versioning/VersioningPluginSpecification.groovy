@@ -30,6 +30,10 @@ class VersioningPluginSpecification extends Specification {
 		project.version(options)
 	}
 
+	String longVersion(options = [:]) {
+		project.longVersion(options)
+	}
+
 	boolean exactMatch() {
 		project.exactMatch()
 	}
