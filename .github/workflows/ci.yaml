@@ -5,19 +5,20 @@
 
 name: Java CI
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   build:
-    # sadly for now the build only works on master due to egit checkout behaviour
-    # of the test-data submodule
-    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
     steps:
       - name: Checkout repository and submodules
         uses: actions/checkout@v2
         with:
           submodules: recursive
+      - name: Fetch submodule tags
+        run: git fetch --tags
+        working-directory: versioning-test-data
       - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
